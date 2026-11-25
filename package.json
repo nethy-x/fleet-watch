@@ -1,0 +1,15 @@
+{
+  "name": "fleet-watch",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Fleet Watch — take-home assignment starter",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "setup": "docker compose up -d --wait && node scripts/copy-env.mjs && npm --prefix server install && npm --prefix web install && npm --prefix server run db:setup",
+    "dev:server": "npm --prefix server run dev",
+    "dev:web": "npm --prefix web run dev",
+    "simulate": "node simulator/simulate.mjs",
+    "test": "npm --prefix server test",
+    "typecheck": "npm --prefix server run typecheck && npm --prefix web run typecheck"
+  }
+}

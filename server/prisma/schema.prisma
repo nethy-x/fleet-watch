@@ -1,0 +1,37 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// The tenancy boundary: a robot belongs to exactly one organization.
+model Organization {
+  id     String  @id @default(uuid())
+  name   String  @unique
+  robots Robot[]
+
+  @@map("organization")
+}
+
+enum RobotType {
+  G1
+  GO2
+}
+
+model Robot {
+  id             String       @id @default(uuid())
+  name           String       @unique
+  type           RobotType
+  /// Preshared token the robot presents as `Authorization: Bearer <token>`.
+  /// Stored in the clear to keep the starter small.
+  token          String       @unique
+  organizationId String       @map("organization_id")
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now()) @map("created_at")
+
+  @@index([organizationId])
+  @@map("robot")
+}
